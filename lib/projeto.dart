@@ -8,7 +8,7 @@ class QuizApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quiz App',
+      title: 'Quiz de Perguntas',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: QuizPage(),
     );
@@ -121,7 +121,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz App'),
+        title: Text('Quiz de Perguntas'),
       ),
       body: _currentQuestionIndex < _questions.length
           ? _buildQuizQuestion()
@@ -137,6 +137,21 @@ class _QuizPageState extends State<QuizPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Barra decorada
+          Container(
+            margin: EdgeInsets.only(bottom: 20),
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Text(
+                'Pergunta ${_currentQuestionIndex + 1} de ${_questions.length}',
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+            ),
+          ),
           Image.network(
             'https://png.pngtree.com/png-clipart/20230120/ourmid/pngtree-quiz-design-vector-clipart-png-image_6569418.png',
             height: 200,
