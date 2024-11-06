@@ -10,7 +10,59 @@ class QuizApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quiz de Perguntas',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: QuizPage(),
+      home: WelcomePage(),
+    );
+  }
+}
+
+class WelcomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Bem-vindo ao Quiz!'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(
+                'https://png.pngtree.com/png-clipart/20230120/ourmid/pngtree-quiz-design-vector-clipart-png-image_6569418.png',
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.scaleDown,
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Bem-vindo ao Quiz!',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Teste seus conhecimentos e veja quantas perguntas você consegue acertar.',
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => QuizPage()),
+                  );
+                },
+                child: Text('Iniciar Quiz'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  textStyle: TextStyle(fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -23,7 +75,8 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   int _currentQuestionIndex = 0;
   int _score = 0;
-
+  String _feedbackMessage = ''; 
+  Color _feedbackColor = Colors.transparent; 
   final List<Map<String, dynamic>> _questions = [
     {
       'question': 'Qual é a capital da França?',
@@ -78,17 +131,28 @@ class _QuizPageState extends State<QuizPage> {
   ];
 
   void _answerQuestion(int selectedOption) {
-    if (selectedOption == _questions[_currentQuestionIndex]['answer']) {
-      _score++;
-    }
-
     setState(() {
-      _currentQuestionIndex++;
+      if (selectedOption == _questions[_currentQuestionIndex]['answer']) {
+        _feedbackMessage = 'Resposta Correta!';
+        _feedbackColor = Colors.green;
+        _score++;
+      } else {
+        _feedbackMessage = 'Resposta Errada!';
+        _feedbackColor = Colors.red;
+      }
     });
 
-    if (_currentQuestionIndex >= _questions.length) {
-      _showScoreDialog();
-    }
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        _feedbackMessage = '';
+        _feedbackColor = Colors.transparent;
+        _currentQuestionIndex++;
+      });
+
+      if (_currentQuestionIndex >= _questions.length) {
+        _showScoreDialog();
+      }
+    });
   }
 
   void _showScoreDialog() {
@@ -114,6 +178,8 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {
       _score = 0;
       _currentQuestionIndex = 0;
+      _feedbackMessage = '';
+      _feedbackColor = Colors.transparent;
     });
   }
 
@@ -167,6 +233,13 @@ class _QuizPageState extends State<QuizPage> {
           ...List.generate(question['options'].length, (index) {
             return _buildOptionButton(index, question['options'][index]);
           }),
+          SizedBox(height: 20),
+          // Exibir feedback de acerto/erro
+          Text(
+            _feedbackMessage,
+            style: TextStyle(fontSize: 18, color: _feedbackColor),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
