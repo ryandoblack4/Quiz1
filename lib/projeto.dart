@@ -42,7 +42,7 @@ class WelcomePage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Teste seus conhecimentos e veja quantas perguntas você consegue acertar.',
+                'Teste seus conhecimentos sobre países e veja quantas perguntas você consegue acertar.',
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
@@ -75,70 +75,95 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   int _currentQuestionIndex = 0;
   int _score = 0;
-  String _feedbackMessage = ''; 
-  Color _feedbackColor = Colors.transparent; 
+  String _feedbackMessage = '';
+  Color _feedbackColor = Colors.transparent;
+  String _feedbackImageUrl = '';
+
   final List<Map<String, dynamic>> _questions = [
     {
-      'question': 'Qual é a capital da França?',
-      'options': ['Berlim', 'Madrid', 'Paris', 'Lisboa'],
-      'answer': 2
+      'question': 'Qual é a capital do Japão?',
+      'options': ['Seul', 'Pequim', 'Tóquio', 'Bangkok'],
+      'correctAnswer': 'Tóquio',
+      'imagem': '',
+      'answer': 2,
     },
     {
-      'question': 'Qual é o maior planeta do sistema solar?',
-      'options': ['Terra', 'Marte', 'Júpiter', 'Saturno'],
-      'answer': 2
+      'question': 'Qual país tem o maior número de habitantes?',
+      'options': ['Índia', 'Brasil', 'China', 'Estados Unidos'],
+      'correctAnswer': 'China',
+      'imagem': '',
+      'answer': 2,
     },
     {
-      'question': 'Quantos continentes existem na Terra?',
-      'options': ['5', '6', '7', '8'],
-      'answer': 2
+      'question': 'Em qual continente fica o Egito?',
+      'options': ['África', 'Ásia', 'Europa', 'Oceania'],
+      'correctAnswer': 'África',
+      'imagem': '',
+      'answer': 0,
     },
     {
-      'question': 'Quantos dedos existem em uma mão?',
-      'options': ['7', '6', '5', '8'],
-      'answer': 2
-    },
-    {
-      'question': 'Qual desses números corresponde a uma cédula que existe no Brasil?',
-      'options': ['7', '6', '5', '8'],
-      'answer': 2
-    },
-    {
-      'question': 'Se João se casou com Maria, quem é o marido de Maria?',
-      'options': ['Jonas', 'Guilherme', 'João', 'Pedro'],
-      'answer': 2
-    },
-    {
-      'question': 'Quantos cômodos uma casa com sala, quarto, banheiro e cozinha tem?',
-      'options': ['5', '6', '4', '8'],
-      'answer': 2
-    },
-    {
-      'question': 'Se você tem 4 irmãos, quantos membros sua família tem?',
-      'options': ['5', '6', '7', '8'],
-      'answer': 2
-    },
-    {
-      'question': 'Qual a principal matéria escolar do ensino Fundamental (1) que usa como principal instrumento o cálculo?',
-      'options': ['Português', 'Química', 'Matemática', 'Física'],
-      'answer': 2
+      'question': 'Qual é o país conhecido como "terra do sol nascente"?',
+      'options': ['Coreia do Sul', 'Japão', 'China', 'Tailândia'],
+      'correctAnswer': 'Japão',
+      'imagem': '',
+      'answer': 1,
     },
     {
       'question': 'Qual é o menor país do mundo?',
       'options': ['Mônaco', 'Nauru', 'Vaticano', 'São Marino'],
-      'answer': 2
-    }
+      'correctAnswer': 'Vaticano',
+      'imagem': '',
+      'answer': 2,
+    },
+    {
+      'question': 'Qual desses países possui mais de uma língua oficial?',
+      'options': ['Brasil', 'Canadá', 'Japão', 'Argentina'],
+      'correctAnswer': 'Canadá',
+      'imagem': '',
+      'answer': 1,
+    },
+    {
+      'question': 'Qual é o maior país em extensão territorial?',
+      'options': ['Estados Unidos', 'China', 'Rússia', 'Canadá'],
+      'correctAnswer': 'Rússia',
+      'imagem': '',
+      'answer': 2,
+    },
+    {
+      'question': 'Qual país é conhecido por sua pizza e pasta?',
+      'options': ['França', 'Itália', 'Espanha', 'Grécia'],
+      'correctAnswer': 'Itália',
+      'imagem': '',
+      'answer': 1,
+    },
+    {
+      'question': 'Em qual país podemos encontrar as pirâmides de Gizé?',
+      'options': ['Egito', 'México', 'Irã', 'Marrocos'],
+      'correctAnswer': 'Egito',
+      'imagem': '',
+      'answer': 0,
+    },
+    {
+      'question': 'Qual país tem o maior deserto do mundo?',
+      'options': ['China', 'Arábia Saudita', 'Egito', 'Antártica'],
+      'correctAnswer': 'Antártica',
+      'imagem': '',
+      'answer': 3,
+    },
   ];
 
   void _answerQuestion(int selectedOption) {
+    final question = _questions[_currentQuestionIndex];
     setState(() {
-      if (selectedOption == _questions[_currentQuestionIndex]['answer']) {
+      if (selectedOption == question['answer']) {
         _feedbackMessage = 'Resposta Correta!';
         _feedbackColor = Colors.green;
         _score++;
+        _feedbackImageUrl = question['imagem'];
       } else {
         _feedbackMessage = 'Resposta Errada!';
         _feedbackColor = Colors.red;
+        _feedbackImageUrl = '';
       }
     });
 
@@ -146,6 +171,7 @@ class _QuizPageState extends State<QuizPage> {
       setState(() {
         _feedbackMessage = '';
         _feedbackColor = Colors.transparent;
+        _feedbackImageUrl = '';
         _currentQuestionIndex++;
       });
 
@@ -180,6 +206,7 @@ class _QuizPageState extends State<QuizPage> {
       _currentQuestionIndex = 0;
       _feedbackMessage = '';
       _feedbackColor = Colors.transparent;
+      _feedbackImageUrl = '';
     });
   }
 
@@ -187,7 +214,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz de Perguntas'),
+        title: Text('Quiz de Perguntas sobre Países'),
       ),
       body: _currentQuestionIndex < _questions.length
           ? _buildQuizQuestion()
@@ -203,7 +230,13 @@ class _QuizPageState extends State<QuizPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Barra decorada
+          Image.network(
+            'https://png.pngtree.com/png-clipart/20230120/ourmid/pngtree-quiz-design-vector-clipart-png-image_6569418.png',
+            height: 200,
+            width: double.infinity,
+            fit: BoxFit.scaleDown,
+          ),
+          SizedBox(height: 20),
           Container(
             margin: EdgeInsets.only(bottom: 20),
             padding: EdgeInsets.all(12),
@@ -214,32 +247,38 @@ class _QuizPageState extends State<QuizPage> {
             child: Center(
               child: Text(
                 'Pergunta ${_currentQuestionIndex + 1} de ${_questions.length}',
-                style: TextStyle(fontSize: 18, color: Colors.white),
+                style: TextStyle(fontSize: 18, color: Colors.black),
               ),
             ),
-          ),
-          Image.network(
-            'https://png.pngtree.com/png-clipart/20230120/ourmid/pngtree-quiz-design-vector-clipart-png-image_6569418.png',
-            height: 200,
-            width: double.infinity,
-            fit: BoxFit.scaleDown,
           ),
           SizedBox(height: 20),
           Text(
             question['question'],
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
           SizedBox(height: 20),
           ...List.generate(question['options'].length, (index) {
             return _buildOptionButton(index, question['options'][index]);
           }),
           SizedBox(height: 20),
-          // Exibir feedback de acerto/erro
           Text(
             _feedbackMessage,
             style: TextStyle(fontSize: 18, color: _feedbackColor),
             textAlign: TextAlign.center,
           ),
+          if (_currentQuestionIndex < _questions.length - 1)
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _currentQuestionIndex++;
+                });
+              },
+              child: Text('Próxima Pergunta'),
+            ),
         ],
       ),
     );
@@ -273,7 +312,7 @@ class _QuizPageState extends State<QuizPage> {
         children: [
           Text(
             'Parabéns! Você completou o quiz.',
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 24, color: Colors.black),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 20),

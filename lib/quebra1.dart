@@ -1,5 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/projeto.dart';
+import 'package:flutter_application_2/projeto.dart';
+
+void main() {
+  runApp(QuizApp());
+}
+
+class QuizApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Quiz de Perguntas',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: WelcomePage(),
+    );
+  }
+}
 
 class WelcomePage extends StatelessWidget {
   @override
@@ -28,7 +43,7 @@ class WelcomePage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Teste seus conhecimentos e veja quantas perguntas você consegue acertar.',
+                'Teste seus conhecimentos sobre países e veja quantas perguntas você consegue acertar.',
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
