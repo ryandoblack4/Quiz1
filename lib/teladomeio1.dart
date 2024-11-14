@@ -1,83 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-void main() {
-  runApp(QuizApp());
-}
-
-class QuizApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Quiz de Perguntas',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: WelcomePage(),
-    );
-  }
-}
-
-class WelcomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Bem-vindo ao Quiz!'),
-        backgroundColor: Colors.black,
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade800, Colors.black],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.network(
-                  'https://png.pngtree.com/png-clipart/20230120/ourmid/pngtree-quiz-design-vector-clipart-png-image_6569418.png',
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.scaleDown,
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Bem-vindo ao Quiz!',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Teste seus conhecimentos sobre países e veja quantas perguntas você consegue acertar.',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => QuizPage()),
-                    );
-                  },
-                  child: Text('Iniciar Quiz'),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    textStyle: TextStyle(fontSize: 18),
-                    backgroundColor: Colors.blueAccent,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class QuizPage extends StatefulWidget {
   @override
@@ -89,7 +11,7 @@ class _QuizPageState extends State<QuizPage> {
   int _score = 0;
   String _feedbackMessage = '';
   Color _feedbackColor = Colors.transparent;
-  int _timeLeft = 30; 
+  int _timeLeft = 30;
   Timer? _timer;
 
   final List<Map<String, dynamic>> _questions = [
@@ -156,8 +78,8 @@ class _QuizPageState extends State<QuizPage> {
   ];
 
   void _startTimer() {
-    _timeLeft = 30; 
-    _timer?.cancel(); 
+    _timeLeft = 30;
+    _timer?.cancel();
 
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_timeLeft > 0) {
@@ -165,7 +87,7 @@ class _QuizPageState extends State<QuizPage> {
           _timeLeft--;
         });
       } else {
-        _nextQuestion(); 
+        _nextQuestion();
       }
     });
   }
@@ -189,7 +111,7 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void _nextQuestion() {
-    _timer?.cancel(); 
+    _timer?.cancel();
 
     setState(() {
       _feedbackMessage = '';
@@ -198,25 +120,15 @@ class _QuizPageState extends State<QuizPage> {
       if (_currentQuestionIndex >= _questions.length) {
         _showFinalScreen();
       } else {
-        _startTimer(); 
+        _startTimer();
       }
     });
   }
 
   void _showFinalScreen() {
-    double percentage = (_score / _questions.length) * 100;
-    String performanceMessage;
-
-    if (percentage < 30) {
-      performanceMessage = 'Seu desempenho não foi bom. Tente novamente.';
-    } else if (percentage >= 40 && percentage <= 70) {
-      performanceMessage = 'Seu desempenho foi bom, parabéns! Tente fazer melhor.';
-    } else {
-      performanceMessage = 'Você é esperto, hein? Aprendeu com quem? Pai? Parabéns, brabo!';
-    }
-
+    // Você pode adicionar mais lógica de desempenho se quiser
     setState(() {
-      _feedbackMessage = performanceMessage;
+      _feedbackMessage = 'Quiz Concluído!';
     });
   }
 
@@ -229,31 +141,6 @@ class _QuizPageState extends State<QuizPage> {
       _timeLeft = 30;
     });
     _startTimer();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _startTimer(); 
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Quiz de Perguntas sobre Países'),
-      ),
-      backgroundColor: Color(0xFFE6F1F9),
-      body: _currentQuestionIndex < _questions.length
-          ? _buildQuizQuestion()
-          : _buildFinalScreen(),
-    );
   }
 
   Widget _buildQuizQuestion() {
@@ -354,6 +241,18 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ],
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Quiz de Perguntas sobre Países'),
+      ),
+      body: _currentQuestionIndex < _questions.length
+          ? _buildQuizQuestion()
+          : _buildFinalScreen(),
     );
   }
 }
